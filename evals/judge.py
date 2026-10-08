@@ -30,6 +30,10 @@ Reply with JSON only, in this exact shape:
 
 VALID = {"correctness": {"correct", "partial", "incorrect"}, "supported": {"yes", "partly", "no"}}
 
+# The judge model may "think" before it answers, and those reasoning tokens count towards
+# max_tokens. In the first live run (2026-10-08) a 600-token cap cut off 3 of 43 verdicts.
+JUDGE_MAX_TOKENS = 2000
+
 
 def build_judge_messages(question: str, gold_answer: str, answer: str, cited_sources: str) -> list[dict]:
     prompt = JUDGE_PROMPT.format(

@@ -54,6 +54,7 @@ class LLMResponse:
     completion_tokens: int = 0
     cost_usd: float | None = None
     latency_s: float = 0.0
+    finish_reason: str | None = None  # "length" means the reply was cut off by max_tokens
 
 
 def write_trace(trace_path: Path | None, record: dict) -> None:
@@ -125,6 +126,7 @@ class LLMClient:
             completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
             cost_usd=getattr(usage, "cost", None),
             latency_s=round(time.perf_counter() - started, 3),
+            finish_reason=getattr(result.choices[0], "finish_reason", None),
         )
         self.total_cost_usd += response.cost_usd or 0.0
         write_trace(self.trace_path, {**record, **asdict(response), "text": None, "outcome": "ok"})
@@ -180,13 +182,20 @@ class FakeLLM:
 
 
 class EmbeddingClient:
-    """Embeddings through an OpenAI-compatible /embeddings endpoint."""
+    """Embeddings through an OpenAI-compatible /embeddings endpoint (OpenRouter has one).
+
+    Adds up the cost OpenRouter reports, and remembers vectors it already
+    computed in this process so a repeated query is not sent twice.
+    """
 
     def __init__(self, model: str, api_key: str, base_url: str, batch_size: int = 64):
         from openai import OpenAI
 
         self.model = model
         self.batch_size = batch_size
+        self.total_cost_usd = 0.0
+        self.total_tokens = 0
+        self._memo: dict[str, list[float]] = {}
         self._client = OpenAI(api_key=api_key, base_url=base_url, timeout=60)
 
     @classmethod
@@ -200,9 +209,13 @@ class EmbeddingClient:
         return cls(model=model, api_key=api_key, base_url=base_url)
 
     def embed(self, texts: list[str]) -> list[list[float]]:
-        vectors: list[list[float]] = []
-        for start in range(0, len(texts), self.batch_size):
-            batch = texts[start : start + self.batch_size]
+        missing = list(dict.fromkeys(t for t in texts if t not in self._memo))
+        for start in range(0, len(missing), self.batch_size):
+            batch = missing[start : start + self.batch_size]
             result = self._client.embeddings.create(model=self.model, input=batch)
-            vectors.extend(item.embedding for item in sorted(result.data, key=lambda d: d.index))
-        return vectors
+            usage = getattr(result, "usage", None)
+            self.total_cost_usd += getattr(usage, "cost", None) or 0.0
+            self.total_tokens += getattr(usage, "prompt_tokens", None) or 0
+            for text, item in zip(batch, sorted(result.data, key=lambda d: d.index), strict=True):
+                self._memo[text] = item.embedding
+        return [self._memo[t] for t in texts]

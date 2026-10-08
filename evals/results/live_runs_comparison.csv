@@ -1,0 +1,10 @@
+run,answer_model,judge_model,retriever,searched,questions,limit,judge_correct_of_answerable,abstained_on_unanswerable,abstained_on_answerable,answered_with_gold_citation,answered_all_citations_gold,judge_supported,language_match,cross_lang_judge_correct,judge_unparsed,latency_mean_s,latency_p95_s,run_cost_usd
+run_20261008T124025Z_openai-gpt-6-luna_bm25,openai/gpt-6-luna,google/gemini-3.8-flash,bm25,agency,agency (10),10,10/10,0/0,0/10,10/10,10/10,10/10,10/10,0/0,0/10,2.009,4.122,0.0142
+run_20261008T124754Z_openai-gpt-6-luna_bm25,openai/gpt-6-luna,google/gemini-3.8-flash,bm25,agency,agency (60),,31/50,10/10,7/50,39/43,38/43,39/43,43/43,0/8,3/43,1.857,3.774,0.0687
+run_20261008T125724Z_openai-gpt-6-luna_bm25,openai/gpt-6-luna,google/gemini-3.8-flash,bm25,agency,agency (60),,32/50,10/10,7/50,39/43,37/43,43/43,43/43,0/8,0/43,1.879,3.81,0.0766
+run_20261008T130639Z_openai-gpt-6-luna_embedding,openai/gpt-6-luna,google/gemini-3.8-flash,embedding,agency,agency (60),,44/50,10/10,0/50,50/50,49/50,49/50,50/50,8/8,0/50,3.13,4.727,0.0777
+run_20261008T130807Z_openai-gpt-6-luna_hybrid,openai/gpt-6-luna,google/gemini-3.8-flash,hybrid,agency,agency (60),,37/50,10/10,3/50,44/47,42/47,45/47,47/47,2/8,0/47,2.868,5.128,0.0786
+run_20261008T131437Z_openai-gpt-6-luna_embedding_agency-public,openai/gpt-6-luna,google/gemini-3.8-flash,embedding,agency+public,agency (60),,42/50,9/10,0/50,50/50,48/50,50/50,50/50,8/8,0/50,2.698,4.466,0.1018
+run_20261008T131437Z_openai-gpt-6-luna_embedding_agency-public,openai/gpt-6-luna,google/gemini-3.8-flash,embedding,agency+public,public (10),,8/10,0/0,1/10,9/9,9/9,9/9,9/9,4/5,0/9,2.235,3.708,0.1018
+run_20261008T131438Z_openai-gpt-6-luna_bm25_agency-public,openai/gpt-6-luna,google/gemini-3.8-flash,bm25,agency+public,agency (60),,32/50,9/10,6/50,38/44,35/44,42/44,44/44,0/8,0/44,2.189,4.513,0.0906
+run_20261008T131438Z_openai-gpt-6-luna_bm25_agency-public,openai/gpt-6-luna,google/gemini-3.8-flash,bm25,agency+public,public (10),,5/10,0/0,4/10,6/6,6/6,6/6,6/6,1/5,0/6,1.488,1.993,0.0906

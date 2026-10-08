@@ -1,0 +1,58 @@
+{
+  "run": "run_20261008T124025Z_openai-gpt-6-luna_bm25",
+  "NOT_REAL_RESULTS": false,
+  "date_utc": "20261008T124025Z",
+  "answer_model": "openai/gpt-6-luna",
+  "judge_model": "google/gemini-3.8-flash",
+  "embedding_model": null,
+  "retriever": "bm25",
+  "chunking": "section",
+  "k": 5,
+  "collections": [
+    "agency"
+  ],
+  "question_files": [
+    "evals/questions.jsonl"
+  ],
+  "split": "all",
+  "limit": 10,
+  "stopped_early_for_cost": false,
+  "cost_usd": 0.0142,
+  "cost_breakdown_usd": {
+    "answers": 0.00091,
+    "judge": 0.01324,
+    "embeddings": 0.0,
+    "answers_per_question": 9.1e-05
+  },
+  "questions": 10,
+  "correct_abstention_on_unanswerable": "0/0",
+  "false_abstention_on_answerable": "0/10",
+  "answered_with_gold_citation": "10/10",
+  "answered_all_citations_gold": "10/10",
+  "mean_citation_precision": 1.0,
+  "answers_with_invalid_citation": "0/10",
+  "language_match": "10/10",
+  "judge_correct": "10/10",
+  "judge_partial": "0/10",
+  "judge_supported": "10/10",
+  "judge_unparsed": "0/10",
+  "judge_correct_of_all_answerable": "10/10",
+  "status_counts": {
+    "answered": 10
+  },
+  "latency_s": {
+    "mean": 2.009,
+    "median": 1.781,
+    "p95": 4.122
+  },
+  "by_group": {
+    "agency/same_lang/en": {
+      "n": 10,
+      "answered": 10,
+      "judge_correct": "10/10",
+      "answered_with_gold_citation": "10/10",
+      "language_match": "10/10",
+      "cites_other_language": "0/10"
+    }
+  }
+}

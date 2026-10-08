@@ -1,20 +1,22 @@
 """Download a few openly licensed travel pages (Wikivoyage / Wikipedia, CC BY-SA 4.0).
 
-These sites were not reachable from the machine that built this repo, so this
-script was written but NOT run there. Run it yourself:
+It was run on 2026-10-08 and its output is committed in data/docs/public/ (a fixed
+snapshot: each file records the revision id it came from). Re-running it fetches the
+current revisions, which can change the public-page evaluation numbers.
 
     python scripts/fetch_wikivoyage.py
     python scripts/fetch_wikivoyage.py --contact "you@example.com"   # recommended
 
 It uses the official MediaWiki API (no HTML scraping), waits between requests,
-and sends a descriptive User-Agent, as the Wikimedia API etiquette asks.
+retries after HTTP 429 (rate limited) as the Retry-After header says, and sends a
+descriptive User-Agent, as the Wikimedia API etiquette asks.
 For every page it writes data/docs/public/<lang>/<slug>.md with the source URL,
 revision id, licence and an attribution line, and it rewrites
-data/docs/public/ATTRIBUTION.md. The app picks the pages up automatically;
-the evaluation keeps using only the fictional agency pages so its numbers stay comparable.
+data/docs/public/ATTRIBUTION.md and LICENSE.md. The app picks the pages up automatically;
+the main evaluation keeps using only the fictional agency pages so its numbers stay comparable.
 
 Licence reminder: the downloaded text stays under CC BY-SA 4.0 (not MIT).
-If you publish it, keep ATTRIBUTION.md and the front matter of each file.
+If you publish it, keep LICENSE.md, ATTRIBUTION.md and the front matter of each file.
 """
 
 from __future__ import annotations
@@ -24,6 +26,7 @@ import json
 import re
 import sys
 import time
+import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import date
@@ -74,9 +77,27 @@ def fetch_page(lang: str, site: str, title: str, user_agent: str) -> dict:
     request = urllib.request.Request(
         f"{api_url(lang, site)}?{urllib.parse.urlencode(params)}", headers={"User-Agent": user_agent}
     )
-    with urllib.request.urlopen(request, timeout=30) as response:
+    with open_with_retry(request) as response:
         data = json.load(response)
     return parse_api_response(data)
+
+
+def open_with_retry(request, attempts: int = 6, opener=urllib.request.urlopen, sleep=time.sleep):
+    """Open a URL; on HTTP 429 (rate limited) wait for the server's Retry-After, then try again.
+
+    Wikimedia answered 429 to our first requests on 2026-10-08 (shared network address);
+    waiting the number of seconds in the Retry-After header was enough.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            return opener(request, timeout=30)
+        except urllib.error.HTTPError as error:
+            if error.code != 429 or attempt == attempts:
+                raise
+            retry_after = error.headers.get("Retry-After", "") if error.headers else ""
+            wait = int(retry_after) if retry_after.isdigit() else 10
+            print(f"rate limited (429), waiting {wait + 1}s (attempt {attempt}/{attempts})", file=sys.stderr)
+            sleep(wait + 1)
 
 
 def parse_api_response(data: dict) -> dict:
@@ -150,6 +171,24 @@ def write_attribution(records: list[dict], out_dir: Path) -> None:
     (out_dir / "ATTRIBUTION.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+LICENSE_NOTE = f"""# Licence of this folder: {LICENSE}
+
+The pages in this folder (`en/`, `ar/`) are text from Wikivoyage and Wikipedia, written by
+their contributors and released under the Creative Commons Attribution-ShareAlike 4.0
+International licence: {LICENSE_URL} (legal code: https://creativecommons.org/licenses/by-sa/4.0/legalcode).
+
+- They are **not** covered by the repository's MIT licence (that covers the code and the
+  fictional agency pages only).
+- Changes made: converted to plain text by the MediaWiki API (TextExtracts), split into
+  numbered sections, sections under 20 words dropped, pages cut after the first sections.
+  Nothing was reworded.
+- Who wrote each page, its URL, revision id and retrieval date: see `ATTRIBUTION.md` and the
+  front matter at the top of each file.
+- If you share or adapt these files, keep this notice and `ATTRIBUTION.md`, credit the
+  contributors, and share your version under the same licence.
+"""
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--out", type=Path, default=OUT_DIR)
@@ -179,10 +218,11 @@ def main() -> int:
                 "attribution": f'"{page["title"]}" ({page["url"]}), {SITE_NAMES[site]} contributors, {LICENSE}.',
             }
         )
-        print(f"saved {path.relative_to(REPO_ROOT)} ({len(sections)} sections)")
+        print(f"saved {lang}/{slug}.md ({len(sections)} sections, {sum(len(b.split()) for _, b in sections)} words)")
         time.sleep(args.delay)
     if records:
         write_attribution(records, args.out)
+        (args.out / "LICENSE.md").write_text(LICENSE_NOTE, encoding="utf-8")
     print(f"{len(records)}/{len(PAGES)} pages saved.")
     return 0 if records else 1
 

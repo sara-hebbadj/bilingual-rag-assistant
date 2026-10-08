@@ -1,0 +1,30 @@
+{
+  "threshold_chosen_on_dev": 9.0822,
+  "dev": {
+    "unanswerable_abstained": "3/4",
+    "answerable_wrongly_abstained": "2/16",
+    "balanced_accuracy": 0.812
+  },
+  "test": {
+    "unanswerable_abstained": "4/6",
+    "answerable_wrongly_abstained": "4/34",
+    "balanced_accuracy": 0.775
+  },
+  "top_score_by_type_all_60": {
+    "same_lang": {
+      "min": 3.7719,
+      "median": 17.8247,
+      "max": 40.3392
+    },
+    "cross_lang": {
+      "min": 10.9071,
+      "median": 17.9353,
+      "max": 21.3512
+    },
+    "unanswerable": {
+      "min": 3.955,
+      "median": 8.4357,
+      "max": 13.8617
+    }
+  }
+}

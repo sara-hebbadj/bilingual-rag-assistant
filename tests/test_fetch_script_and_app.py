@@ -54,6 +54,37 @@ def test_wikivoyage_page_becomes_attributed_markdown(tmp_path):
     assert [s.number for s in doc.sections] == [1, 2]
 
 
+def test_rate_limited_request_waits_and_retries():
+    # Wikimedia answered HTTP 429 to the first requests on 2026-10-08; the script now waits and retries.
+    import io
+    import urllib.error
+
+    script = load_script()
+    calls, waits = [], []
+
+    def fake_opener(request, timeout):
+        calls.append(request)
+        if len(calls) == 1:
+            raise urllib.error.HTTPError("https://x", 429, "Too Many Requests", {"Retry-After": "3"}, io.BytesIO())
+        return "response"
+
+    assert script.open_with_retry("req", opener=fake_opener, sleep=waits.append) == "response"
+    assert len(calls) == 2 and waits == [4]
+
+
+def test_other_http_errors_are_not_retried():
+    import io
+    import urllib.error
+
+    script = load_script()
+
+    def not_found(request, timeout):
+        raise urllib.error.HTTPError("https://x", 404, "Not Found", {}, io.BytesIO())
+
+    with pytest.raises(urllib.error.HTTPError):
+        script.open_with_retry("req", opener=not_found, sleep=lambda s: None)
+
+
 def test_missing_page_raises():
     script = load_script()
     with pytest.raises(LookupError):

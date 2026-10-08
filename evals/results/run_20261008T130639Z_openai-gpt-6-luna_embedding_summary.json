@@ -1,0 +1,91 @@
+{
+  "run": "run_20261008T130639Z_openai-gpt-6-luna_embedding",
+  "NOT_REAL_RESULTS": false,
+  "date_utc": "20261008T130639Z",
+  "answer_model": "openai/gpt-6-luna",
+  "judge_model": "google/gemini-3.8-flash",
+  "embedding_model": "baai/bge-m3",
+  "retriever": "embedding",
+  "chunking": "section",
+  "k": 5,
+  "collections": [
+    "agency"
+  ],
+  "question_files": [
+    "evals/questions.jsonl"
+  ],
+  "split": "all",
+  "limit": null,
+  "stopped_early_for_cost": false,
+  "cost_usd": 0.0777,
+  "cost_breakdown_usd": {
+    "answers": 0.00574,
+    "judge": 0.07193,
+    "embeddings": 1e-05,
+    "answers_per_question": 9.6e-05
+  },
+  "questions": 60,
+  "correct_abstention_on_unanswerable": "10/10",
+  "false_abstention_on_answerable": "0/50",
+  "answered_with_gold_citation": "50/50",
+  "answered_all_citations_gold": "49/50",
+  "mean_citation_precision": 0.99,
+  "answers_with_invalid_citation": "0/60",
+  "language_match": "50/50",
+  "judge_correct": "44/50",
+  "judge_partial": "6/50",
+  "judge_supported": "49/50",
+  "judge_unparsed": "0/50",
+  "judge_correct_of_all_answerable": "44/50",
+  "status_counts": {
+    "abstained": 10,
+    "answered": 50
+  },
+  "latency_s": {
+    "mean": 3.13,
+    "median": 2.857,
+    "p95": 4.727
+  },
+  "by_group": {
+    "agency/cross_lang/ar": {
+      "n": 4,
+      "answered": 4,
+      "judge_correct": "4/4",
+      "answered_with_gold_citation": "4/4",
+      "language_match": "4/4",
+      "cites_other_language": "4/4"
+    },
+    "agency/cross_lang/en": {
+      "n": 4,
+      "answered": 4,
+      "judge_correct": "4/4",
+      "answered_with_gold_citation": "4/4",
+      "language_match": "4/4",
+      "cites_other_language": "4/4"
+    },
+    "agency/same_lang/ar": {
+      "n": 21,
+      "answered": 21,
+      "judge_correct": "18/21",
+      "answered_with_gold_citation": "21/21",
+      "language_match": "21/21",
+      "cites_other_language": "0/21"
+    },
+    "agency/same_lang/en": {
+      "n": 21,
+      "answered": 21,
+      "judge_correct": "18/21",
+      "answered_with_gold_citation": "21/21",
+      "language_match": "21/21",
+      "cites_other_language": "0/21"
+    },
+    "agency/unanswerable/ar": {
+      "n": 5,
+      "answered": 0
+    },
+    "agency/unanswerable/en": {
+      "n": 5,
+      "answered": 0
+    }
+  }
+}

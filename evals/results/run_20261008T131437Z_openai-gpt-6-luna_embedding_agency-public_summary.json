@@ -1,0 +1,125 @@
+{
+  "run": "run_20261008T131437Z_openai-gpt-6-luna_embedding_agency-public",
+  "NOT_REAL_RESULTS": false,
+  "date_utc": "20261008T131437Z",
+  "answer_model": "openai/gpt-6-luna",
+  "judge_model": "google/gemini-3.8-flash",
+  "embedding_model": "baai/bge-m3",
+  "retriever": "embedding",
+  "chunking": "section",
+  "k": 5,
+  "collections": [
+    "agency",
+    "public"
+  ],
+  "question_files": [
+    "evals/questions.jsonl",
+    "evals/questions_public.jsonl"
+  ],
+  "split": "all",
+  "limit": null,
+  "stopped_early_for_cost": false,
+  "cost_usd": 0.1018,
+  "cost_breakdown_usd": {
+    "answers": 0.01043,
+    "judge": 0.0914,
+    "embeddings": 1.2e-05,
+    "answers_per_question": 0.000149
+  },
+  "questions": 70,
+  "correct_abstention_on_unanswerable": "9/10",
+  "false_abstention_on_answerable": "1/60",
+  "answered_with_gold_citation": "59/59",
+  "answered_all_citations_gold": "57/59",
+  "mean_citation_precision": 0.983,
+  "answers_with_invalid_citation": "0/70",
+  "language_match": "59/59",
+  "judge_correct": "50/59",
+  "judge_partial": "9/59",
+  "judge_supported": "59/59",
+  "judge_unparsed": "0/59",
+  "judge_correct_of_all_answerable": "50/60",
+  "status_counts": {
+    "abstained": 10,
+    "answered": 60
+  },
+  "latency_s": {
+    "mean": 2.632,
+    "median": 2.503,
+    "p95": 4.345
+  },
+  "by_group": {
+    "agency/cross_lang/ar": {
+      "n": 4,
+      "answered": 4,
+      "judge_correct": "4/4",
+      "answered_with_gold_citation": "4/4",
+      "language_match": "4/4",
+      "cites_other_language": "4/4"
+    },
+    "agency/cross_lang/en": {
+      "n": 4,
+      "answered": 4,
+      "judge_correct": "4/4",
+      "answered_with_gold_citation": "4/4",
+      "language_match": "4/4",
+      "cites_other_language": "4/4"
+    },
+    "agency/same_lang/ar": {
+      "n": 21,
+      "answered": 21,
+      "judge_correct": "16/21",
+      "answered_with_gold_citation": "21/21",
+      "language_match": "21/21",
+      "cites_other_language": "1/21"
+    },
+    "agency/same_lang/en": {
+      "n": 21,
+      "answered": 21,
+      "judge_correct": "18/21",
+      "answered_with_gold_citation": "21/21",
+      "language_match": "21/21",
+      "cites_other_language": "0/21"
+    },
+    "agency/unanswerable/ar": {
+      "n": 5,
+      "answered": 1
+    },
+    "agency/unanswerable/en": {
+      "n": 5,
+      "answered": 0
+    },
+    "public/cross_lang/ar": {
+      "n": 3,
+      "answered": 3,
+      "judge_correct": "3/3",
+      "answered_with_gold_citation": "3/3",
+      "language_match": "3/3",
+      "cites_other_language": "3/3"
+    },
+    "public/cross_lang/en": {
+      "n": 2,
+      "answered": 1,
+      "judge_correct": "1/2",
+      "answered_with_gold_citation": "1/1",
+      "language_match": "1/1",
+      "cites_other_language": "1/1"
+    },
+    "public/same_lang/ar": {
+      "n": 2,
+      "answered": 2,
+      "judge_correct": "2/2",
+      "answered_with_gold_citation": "2/2",
+      "language_match": "2/2",
+      "cites_other_language": "0/2"
+    },
+    "public/same_lang/en": {
+      "n": 3,
+      "answered": 3,
+      "judge_correct": "2/3",
+      "answered_with_gold_citation": "3/3",
+      "language_match": "3/3",
+      "cites_other_language": "0/3"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-08",
+  "command": "python -m evals.retrieval_eval --with-embeddings --collections agency public --questions evals/questions.jsonl evals/questions_public.jsonl --out evals/results/agency_plus_public",
+  "questions": 70,
+  "answerable": 60,
+  "corpus": "data/docs/agency (16 fictional help pages, EN+AR) + data/docs/public (8 Wikivoyage/Wikipedia pages, CC BY-SA 4.0)",
+  "chunks": {
+    "section": 299,
+    "small": 2535
+  },
+  "embedding_model": "baai/bge-m3",
+  "embedding_cost_usd": 0.002083,
+  "embedding_tokens": 208332
+}

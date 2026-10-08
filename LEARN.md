@@ -14,7 +14,7 @@ For Sara. Do the walkthrough out loud twice before an interview, then answer the
 
 **6:00 – Answering and grounding (2 min).** `answer.py`: sources are numbered [S1]..[S5]; the rules say answer only from them, cite, reply in the question's language, or say NOT_IN_SOURCES. Then the code checks: no citation → the answer is blocked. "The prompt asks; the code enforces."
 
-**8:00 – Results (2 min).** Open `evals/results/retrieval_hit5.png` and the README table. "Same-language hit@5 is 0.95 in English and 0.91 in Arabic; normalisation took Arabic from 0.76 to 0.91. Cross-language is 0 of 8 with BM25, which is why the next step is embeddings. A score threshold for 'I don't know' worked on dev but not on test, so I left it off." Finish with what is pending (live LLM run) and what you would do next.
+**8:00 – Results (2 min).** Open `evals/results/retrieval_hit5.png` and the README table. "Same-language hit@5 is 0.95 in English and 0.91 in Arabic; normalisation took Arabic from 0.76 to 0.91. Cross-language is 0 of 8 with BM25, which is why the next step is embeddings. A score threshold for 'I don't know' worked on dev but not on test, so I left it off." Then the live run (README section 5): with embeddings, 44/50 answers judged correct, 10/10 correct "I don't know", 8/8 cross-language correct; with BM25 32/50 and 0/8 cross-language. Mention that the judge is a model, not a person, and finish with what you would do next.
 
 ## Ten interview questions with short answers
 

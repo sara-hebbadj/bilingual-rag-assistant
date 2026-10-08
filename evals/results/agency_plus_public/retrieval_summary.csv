@@ -1,0 +1,91 @@
+config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
+"bm25-plain, section",all answerable,50,0.52,0.6,0.64,0.63,0.569
+"bm25-plain, section",English questions,25,0.52,0.64,0.64,0.64,0.573
+"bm25-plain, section",Arabic questions,25,0.52,0.56,0.64,0.62,0.565
+"bm25-plain, section",same-language,42,0.619,0.714,0.762,0.75,0.678
+"bm25-plain, section","English, same-language",21,0.619,0.762,0.762,0.762,0.683
+"bm25-plain, section","Arabic, same-language",21,0.619,0.667,0.762,0.738,0.673
+"bm25-plain, section",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-plain, section",public-page questions,10,0.5,0.5,0.5,0.45,0.51
+"bm25-plain, section","public-page, cross-language",5,0.0,0.0,0.0,0.0,0.02
+"bm25-normalised, section",all answerable,50,0.5,0.64,0.68,0.67,0.592
+"bm25-normalised, section",English questions,25,0.48,0.64,0.68,0.68,0.575
+"bm25-normalised, section",Arabic questions,25,0.52,0.64,0.68,0.66,0.608
+"bm25-normalised, section",same-language,42,0.595,0.762,0.81,0.798,0.7
+"bm25-normalised, section","English, same-language",21,0.571,0.762,0.81,0.81,0.684
+"bm25-normalised, section","Arabic, same-language",21,0.619,0.762,0.81,0.786,0.716
+"bm25-normalised, section",cross-language,8,0.0,0.0,0.0,0.0,0.021
+"bm25-normalised, section",public-page questions,10,0.4,0.6,0.6,0.55,0.5
+"bm25-normalised, section","public-page, cross-language",5,0.0,0.2,0.2,0.2,0.1
+"bm25-stemmed, section",all answerable,50,0.5,0.72,0.76,0.75,0.616
+"bm25-stemmed, section",English questions,25,0.48,0.72,0.76,0.76,0.594
+"bm25-stemmed, section",Arabic questions,25,0.52,0.72,0.76,0.74,0.637
+"bm25-stemmed, section",same-language,42,0.595,0.857,0.905,0.893,0.73
+"bm25-stemmed, section","English, same-language",21,0.571,0.857,0.905,0.905,0.708
+"bm25-stemmed, section","Arabic, same-language",21,0.619,0.857,0.905,0.881,0.752
+"bm25-stemmed, section",cross-language,8,0.0,0.0,0.0,0.0,0.016
+"bm25-stemmed, section",public-page questions,10,0.5,0.5,0.6,0.55,0.52
+"bm25-stemmed, section","public-page, cross-language",5,0.0,0.0,0.2,0.2,0.04
+"bm25-plain, small",all answerable,50,0.52,0.54,0.6,0.59,0.55
+"bm25-plain, small",English questions,25,0.52,0.56,0.6,0.6,0.548
+"bm25-plain, small",Arabic questions,25,0.52,0.52,0.6,0.58,0.552
+"bm25-plain, small",same-language,42,0.619,0.643,0.714,0.702,0.655
+"bm25-plain, small","English, same-language",21,0.619,0.667,0.714,0.714,0.652
+"bm25-plain, small","Arabic, same-language",21,0.619,0.619,0.714,0.69,0.657
+"bm25-plain, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-plain, small",public-page questions,10,0.4,0.5,0.6,0.55,0.475
+"bm25-plain, small","public-page, cross-language",5,0.0,0.2,0.2,0.2,0.1
+"bm25-normalised, small",all answerable,50,0.5,0.58,0.64,0.63,0.562
+"bm25-normalised, small",English questions,25,0.52,0.64,0.64,0.64,0.582
+"bm25-normalised, small",Arabic questions,25,0.48,0.52,0.64,0.62,0.542
+"bm25-normalised, small",same-language,42,0.595,0.69,0.762,0.75,0.67
+"bm25-normalised, small","English, same-language",21,0.619,0.762,0.762,0.762,0.693
+"bm25-normalised, small","Arabic, same-language",21,0.571,0.619,0.762,0.738,0.646
+"bm25-normalised, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-normalised, small",public-page questions,10,0.5,0.6,0.6,0.55,0.55
+"bm25-normalised, small","public-page, cross-language",5,0.2,0.2,0.2,0.2,0.2
+"bm25-stemmed, small",all answerable,50,0.52,0.62,0.72,0.71,0.595
+"bm25-stemmed, small",English questions,25,0.52,0.56,0.72,0.72,0.575
+"bm25-stemmed, small",Arabic questions,25,0.52,0.68,0.72,0.7,0.615
+"bm25-stemmed, small",same-language,42,0.619,0.738,0.857,0.845,0.708
+"bm25-stemmed, small","English, same-language",21,0.619,0.667,0.857,0.857,0.685
+"bm25-stemmed, small","Arabic, same-language",21,0.619,0.81,0.857,0.833,0.732
+"bm25-stemmed, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-stemmed, small",public-page questions,10,0.5,0.6,0.6,0.55,0.533
+"bm25-stemmed, small","public-page, cross-language",5,0.0,0.2,0.2,0.2,0.067
+"embedding, section",all answerable,50,0.94,1.0,1.0,0.99,0.97
+"embedding, section",English questions,25,0.92,1.0,1.0,1.0,0.96
+"embedding, section",Arabic questions,25,0.96,1.0,1.0,0.98,0.98
+"embedding, section",same-language,42,0.952,1.0,1.0,0.988,0.976
+"embedding, section","English, same-language",21,0.952,1.0,1.0,1.0,0.976
+"embedding, section","Arabic, same-language",21,0.952,1.0,1.0,0.976,0.976
+"embedding, section",cross-language,8,0.875,1.0,1.0,1.0,0.938
+"embedding, section",public-page questions,10,0.9,0.9,0.9,0.85,0.9
+"embedding, section","public-page, cross-language",5,0.8,0.8,0.8,0.8,0.8
+"hybrid, section",all answerable,50,0.76,0.86,0.92,0.91,0.828
+"hybrid, section",English questions,25,0.76,0.84,0.88,0.88,0.817
+"hybrid, section",Arabic questions,25,0.76,0.88,0.96,0.94,0.84
+"hybrid, section",same-language,42,0.881,1.0,1.0,0.988,0.937
+"hybrid, section","English, same-language",21,0.905,1.0,1.0,1.0,0.944
+"hybrid, section","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.929
+"hybrid, section",cross-language,8,0.125,0.125,0.5,0.5,0.261
+"hybrid, section",public-page questions,10,0.5,0.7,0.8,0.75,0.618
+"hybrid, section","public-page, cross-language",5,0.0,0.4,0.6,0.6,0.237
+"embedding, small",all answerable,50,0.92,0.98,1.0,0.99,0.947
+"embedding, small",English questions,25,0.92,0.96,1.0,1.0,0.941
+"embedding, small",Arabic questions,25,0.92,1.0,1.0,0.98,0.953
+"embedding, small",same-language,42,0.929,0.976,1.0,0.988,0.953
+"embedding, small","English, same-language",21,0.952,0.952,1.0,1.0,0.962
+"embedding, small","Arabic, same-language",21,0.905,1.0,1.0,0.976,0.944
+"embedding, small",cross-language,8,0.875,1.0,1.0,1.0,0.917
+"embedding, small",public-page questions,10,0.7,0.7,0.9,0.85,0.745
+"embedding, small","public-page, cross-language",5,0.4,0.4,0.8,0.8,0.49
+"hybrid, small",all answerable,50,0.74,0.9,0.92,0.91,0.818
+"hybrid, small",English questions,25,0.76,0.84,0.88,0.88,0.81
+"hybrid, small",Arabic questions,25,0.72,0.96,0.96,0.94,0.826
+"hybrid, small",same-language,42,0.881,1.0,1.0,0.988,0.929
+"hybrid, small","English, same-language",21,0.905,1.0,1.0,1.0,0.937
+"hybrid, small","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.921
+"hybrid, small",cross-language,8,0.0,0.375,0.5,0.5,0.238
+"hybrid, small",public-page questions,10,0.6,0.7,0.7,0.65,0.671
+"hybrid, small","public-page, cross-language",5,0.2,0.4,0.4,0.4,0.342

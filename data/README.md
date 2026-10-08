@@ -29,14 +29,26 @@ notice: Fictional demo document ...
 
 The English and Arabic versions of a topic use the **same section numbers**, so `refunds#2` names the same content in both languages. The evaluation's gold labels use these ids.
 
-## `docs/public/`: openly licensed pages (not included, optional)
+## `docs/public/`: openly licensed pages (included, CC BY-SA 4.0, NOT MIT)
 
-`python scripts/fetch_wikivoyage.py` downloads a few Wikivoyage (English) and Wikipedia (Arabic) pages about Dubai, Abu Dhabi, the UAE, Muscat and Doha through the official MediaWiki API, and writes:
+`python scripts/fetch_wikivoyage.py` downloaded these pages through the official MediaWiki API on **2026-10-08** (after waiting out HTTP 429 rate limits), and the result is committed as a fixed snapshot:
 
-- `docs/public/<lang>/<slug>.md`, with the source URL, revision id, retrieval date, licence and an attribution line in the front matter;
-- `docs/public/ATTRIBUTION.md`, listing every page.
+| File | Source | Revision |
+|---|---|---|
+| `en/dubai.md` | Wikivoyage "Dubai" | 5379926 |
+| `en/abu-dhabi.md` | Wikivoyage "Abu Dhabi" | 5376885 |
+| `en/united-arab-emirates.md` | Wikivoyage "United Arab Emirates" | 5380906 |
+| `en/muscat.md` | Wikivoyage "Muscat" | 5354042 |
+| `en/doha.md` | Wikivoyage "Doha" | 5375843 |
+| `ar/dubai.md` | Arabic Wikipedia "دبي" | 76810043 |
+| `ar/abu-dhabi.md` | Arabic Wikipedia "أبو ظبي" | 76835152 |
+| `ar/muscat.md` | Arabic Wikipedia "مسقط" | 76817735 |
 
-These pages are under **CC BY-SA 4.0** (https://creativecommons.org/licenses/by-sa/4.0/), **not** MIT. If you publish them, keep the attribution files and keep them under CC BY-SA. The script was written but not run on the build machine (Wikimedia sites were blocked there). The app includes them automatically when present; the evaluation does not, so its numbers stay comparable.
+- **Licence:** Creative Commons Attribution-ShareAlike 4.0 (https://creativecommons.org/licenses/by-sa/4.0/). The folder has its own `LICENSE.md` and `ATTRIBUTION.md`, and every file keeps the source URL, revision id, retrieval date and attribution line in its front matter. These files are **not** covered by the repository's MIT licence.
+- **Why commit them:** CC BY-SA allows redistribution with attribution under the same licence, and a fixed snapshot (with revision ids) makes the public-page evaluation reproducible. Re-running the script fetches newer revisions and can change those numbers.
+- **Changes:** plain-text extract (the API drops tables and templates), split into numbered sections at level-2 headings, sections under 20 words dropped, at most 12 sections per page. No rewording.
+- **Size:** about 55,600 words (209 section chunks), roughly 12 times the agency pages. Arabic comes from Wikipedia (encyclopedic), the script's original choice because Arabic Wikivoyage coverage looked thin (not re-checked on 2026-10-08), so the English and Arabic public pages are different articles and do not share section ids.
+- **Use:** the demo app searches them by default. The main evaluation (`evals/questions.jsonl`) still uses only the agency pages so its numbers stay comparable; a separate run adds them (see `evals/questions_public.jsonl` below).
 
 ## `index/` (created on demand, not committed)
 
@@ -52,3 +64,5 @@ Cached chunk embeddings for the optional embedding/hybrid retriever, one file pe
 | `gold_sections` | section ids that contain the answer (empty for unanswerable) |
 | `gold_answer` | short reference answer, used by the judge model |
 | `split` | `dev` (every third question, 20) is only for choosing thresholds; `test` (40) is for reporting |
+
+`../evals/questions_public.jsonl` — 10 extra questions (5 English, 5 Arabic; 5 same-language, 5 cross-language) whose answers are in the public pages, added on 2026-10-08. Same fields plus `"corpus": "public"`. They are reported separately and never mixed into the 60-question numbers. Written by the same coding agent that ran the evaluation, after reading the pages, so they share wording with them.

@@ -26,12 +26,13 @@ class AssistantConfig:
     collections: tuple[str, ...] = ("agency", "public")  # "public" is skipped if not fetched
 
 
-def build_retriever(chunks: list[Chunk], name: str = "bm25", analyzer: str = "stemmed") -> Retriever:
+def build_retriever(chunks: list[Chunk], name: str = "bm25", analyzer: str = "stemmed", embedder=None) -> Retriever:
+    """embedder: an llm.EmbeddingClient; created from the environment when needed and not given."""
     if name == "bm25":
         return BM25Retriever(chunks, analyzer=analyzer)
     from .llm import EmbeddingClient  # only needed for embedding/hybrid
 
-    client = EmbeddingClient.from_env()
+    client = embedder or EmbeddingClient.from_env()
     slug = re.sub(r"[^A-Za-z0-9]+", "-", client.model)
     cache = REPO_ROOT / "data" / "index" / f"embeddings-{slug}.json"
     dense = EmbeddingRetriever(chunks, client.embed, cache_path=cache)
@@ -43,10 +44,11 @@ def build_retriever(chunks: list[Chunk], name: str = "bm25", analyzer: str = "st
 
 
 class RagAssistant:
-    def __init__(self, retriever: Retriever, llm=None, config: AssistantConfig | None = None):
+    def __init__(self, retriever: Retriever, llm=None, config: AssistantConfig | None = None, embedder=None):
         self.retriever = retriever
         self.llm = llm
         self.config = config or AssistantConfig()
+        self.embedder = embedder  # kept so the evaluation can report embedding cost
 
     def search(self, question: str, k: int | None = None) -> list[SearchHit]:
         return self.retriever.search(question, k=k or self.config.k)
@@ -64,5 +66,10 @@ class RagAssistant:
 def build_assistant(config: AssistantConfig | None = None, llm=None) -> RagAssistant:
     config = config or AssistantConfig()
     chunks = load_chunks(config.chunking, config.collections)
-    retriever = build_retriever(chunks, config.retriever, config.analyzer)
-    return RagAssistant(retriever, llm, config)
+    embedder = None
+    if config.retriever != "bm25":
+        from .llm import EmbeddingClient
+
+        embedder = EmbeddingClient.from_env()
+    retriever = build_retriever(chunks, config.retriever, config.analyzer, embedder)
+    return RagAssistant(retriever, llm, config, embedder)

@@ -3,7 +3,7 @@
 from collections import Counter
 
 from bilingual_rag.ingest import load_documents
-from evals.retrieval_eval import load_questions
+from evals.retrieval_eval import EVAL_DIR, load_questions
 
 
 def test_question_counts_match_the_spec():
@@ -37,3 +37,17 @@ def test_both_splits_contain_unanswerable_questions():
     questions = load_questions()
     for split in ("dev", "test"):
         assert any(q["split"] == split and not q["answerable"] for q in questions)
+
+
+def test_public_page_questions_point_to_existing_public_sections():
+    """The extra questions about the CC BY-SA pages (kept apart from the 60 original questions)."""
+    documents = load_documents(collections=("public",))
+    sections = {f"{d.doc_id}#{s.number}" for d in documents for s in d.sections}
+    docs = {(d.doc_id, d.lang) for d in documents}
+    questions = load_questions(EVAL_DIR / "questions_public.jsonl")
+    assert len({q["id"] for q in questions}) == len(questions) == 10
+    for q in questions:
+        assert q["corpus"] == "public" and q["answerable"], q["id"]
+        assert set(q["gold_sections"]) <= sections, q["id"]
+        if q["type"] == "cross_lang":
+            assert all((g.split("#")[0], q["lang"]) not in docs for g in q["gold_sections"]), q["id"]
