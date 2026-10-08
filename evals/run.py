@@ -1,0 +1,189 @@
+"""End-to-end evaluation: retrieve, answer with a real model, score, and (optionally) judge.
+
+    python -m evals.run --model cheap --limit 10     # real run, needs OPENROUTER_API_KEY
+    python -m evals.run --model main                 # all 60 questions
+    python -m evals.run --dry-run                    # offline, fake model, NOT real results
+
+Real runs write to evals/results/ and evals/traces.jsonl.
+Dry runs write to evals/dry_run/ so they can never be mistaken for real results.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import json
+import os
+import random
+import re
+from datetime import UTC, datetime
+from pathlib import Path
+
+from bilingual_rag.assistant import RETRIEVERS, AssistantConfig, build_assistant
+from bilingual_rag.ingest import CHUNKING
+from bilingual_rag.llm import FakeLLM, LLMClient, load_env
+from bilingual_rag.metrics import abstention_correct, citation_precision, hit_at_k, language_matches, mean
+
+from .judge import build_judge_messages, model_family, parse_verdict
+from .retrieval_eval import load_questions
+
+EVAL_DIR = Path(__file__).resolve().parent
+
+
+def make_clients(args) -> tuple:
+    """Return (answer_llm, judge_llm or None, output_dir, trace_path)."""
+    if args.dry_run:
+        out = EVAL_DIR / "dry_run"
+        trace = out / "traces.jsonl"
+        trace.unlink(missing_ok=True)  # dry runs start fresh; only the latest one is kept
+        return FakeLLM(trace_path=trace), (None if args.no_judge else FakeLLM(trace_path=trace)), out, trace
+    out = EVAL_DIR / "results"
+    trace = EVAL_DIR / "traces.jsonl"
+    answer_llm = LLMClient.from_env(args.model, trace_path=trace)
+    judge_llm = None if args.no_judge else LLMClient.from_env("judge", trace_path=trace)
+    if judge_llm and model_family(judge_llm.model) == model_family(answer_llm.model):
+        print(f"WARNING: judge {judge_llm.model} and answer model {answer_llm.model} are from the same family.")
+    return answer_llm, judge_llm, out, trace
+
+
+def evaluate_question(assistant, judge_llm, question: dict) -> dict:
+    answer = assistant.ask(question["question"], meta={"question_id": question["id"]})
+    gold = question["gold_sections"]
+    cited_sections = [hit.chunk.section_id for hit in answer.cited_hits]
+    retrieved_sections = [hit.chunk.section_id for hit in answer.sources]
+    row = {
+        "id": question["id"],
+        "lang": question["lang"],
+        "type": question["type"],
+        "question": question["question"],
+        "status": answer.status,
+        "abstained": answer.abstained,
+        "abstention_correct": abstention_correct(answer.abstained, question["answerable"]),
+        "retrieval_hit": hit_at_k(retrieved_sections, gold, len(retrieved_sections)) if gold else None,
+        "cited_sections": cited_sections,
+        "invalid_citations": answer.invalid_citations,
+        "citation_precision": citation_precision(cited_sections, gold) if question["answerable"] else None,
+        "language_match": language_matches(answer.text, question["lang"]) if not answer.abstained else None,
+        "answer": answer.text,
+        "model_text": answer.model_text,
+        "gold_answer": question["gold_answer"],
+    }
+    if judge_llm and question["answerable"] and not answer.abstained:
+        cited = "\n\n".join(f"[S{n}] {answer.sources[n - 1].chunk.text}" for n in answer.cited)
+        messages = build_judge_messages(question["question"], question["gold_answer"], answer.text, cited)
+        verdict = parse_verdict(
+            judge_llm.complete(messages, purpose="judge", meta={"question_id": question["id"]}).text
+        )
+        row.update({f"judge_{k}": v for k, v in verdict.items()})
+    return row
+
+
+def summarise(rows: list[dict]) -> dict:
+    answerable = [r for r in rows if r["type"] != "unanswerable"]
+    unanswerable = [r for r in rows if r["type"] == "unanswerable"]
+    answered = [r for r in answerable if not r["abstained"]]
+    judged = [r for r in answered if "judge_correctness" in r]
+
+    def rate(items, test):
+        return f"{sum(1 for r in items if test(r))}/{len(items)}" if items else "0/0"
+
+    return {
+        "questions": len(rows),
+        "correct_abstention_on_unanswerable": rate(unanswerable, lambda r: r["abstained"]),
+        "false_abstention_on_answerable": rate(answerable, lambda r: r["abstained"]),
+        "answered_with_gold_citation": rate(answered, lambda r: (r["citation_precision"] or 0) > 0),
+        "mean_citation_precision": _round(mean([r["citation_precision"] for r in answered])),
+        "answers_with_invalid_citation": rate(rows, lambda r: bool(r["invalid_citations"])),
+        "language_match": rate(answered, lambda r: r["language_match"]),
+        "judge_correct": rate(judged, lambda r: r["judge_correctness"] == "correct"),
+        "judge_partial": rate(judged, lambda r: r["judge_correctness"] == "partial"),
+        "judge_supported": rate(judged, lambda r: r["judge_supported"] == "yes"),
+        "status_counts": {s: sum(1 for r in rows if r["status"] == s) for s in sorted({r["status"] for r in rows})},
+    }
+
+
+def _round(value):
+    return round(value, 3) if value is not None else None
+
+
+def write_human_review(rows: list[dict], path: Path, n: int = 20, seed: int = 42) -> None:
+    """A sheet for Sara: 20 random answerable questions with empty columns for her verdict."""
+    candidates = [r for r in rows if r["type"] != "unanswerable"]
+    sample = random.Random(seed).sample(candidates, min(n, len(candidates)))
+    fields = [
+        "id",
+        "lang",
+        "question",
+        "gold_answer",
+        "answer",
+        "status",
+        "judge_correctness",
+        "sara_correctness",
+        "sara_notes",
+    ]
+    with path.open("w", newline="", encoding="utf-8-sig") as f:  # utf-8-sig so Excel shows Arabic correctly
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        for row in sample:
+            writer.writerow({**row, "sara_correctness": "", "sara_notes": ""})
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("--model", choices=["main", "cheap"], default="cheap")
+    parser.add_argument("--limit", type=int, default=None, help="only the first N questions")
+    parser.add_argument("--split", choices=["all", "dev", "test"], default="all")
+    parser.add_argument("--retriever", choices=RETRIEVERS, default="bm25")
+    parser.add_argument("--chunking", choices=list(CHUNKING), default="section")
+    parser.add_argument("-k", type=int, default=5)
+    parser.add_argument("--no-judge", action="store_true")
+    parser.add_argument("--dry-run", action="store_true", help="fake model, no network, writes to evals/dry_run/")
+    args = parser.parse_args()
+
+    load_env()
+    max_cost = float(os.getenv("MAX_COST_PER_RUN_USD") or 3)
+    answer_llm, judge_llm, out_dir, trace_path = make_clients(args)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    config = AssistantConfig(retriever=args.retriever, chunking=args.chunking, k=args.k, collections=("agency",))
+    assistant = build_assistant(config, llm=answer_llm)
+
+    questions = [q for q in load_questions() if args.split == "all" or q["split"] == args.split][: args.limit]
+    rows, stopped_early = [], False
+    for number, question in enumerate(questions, start=1):
+        rows.append(evaluate_question(assistant, judge_llm, question))
+        spent = answer_llm.total_cost_usd + (judge_llm.total_cost_usd if judge_llm else 0)
+        print(f"[{number}/{len(questions)}] {question['id']} -> {rows[-1]['status']} (cost so far ${spent:.4f})")
+        if spent > max_cost:
+            print(f"Stopping: cost ${spent:.2f} passed MAX_COST_PER_RUN_USD=${max_cost}.")
+            stopped_early = True
+            break
+
+    stamp = datetime.now(UTC).strftime("%Y%m%dT%H%M%SZ")
+    slug = re.sub(r"[^A-Za-z0-9]+", "-", answer_llm.model)
+    name = "DRY_RUN_fake-llm" if args.dry_run else f"run_{stamp}_{slug}_{args.retriever}"
+    summary = {
+        "run": name,
+        "NOT_REAL_RESULTS": args.dry_run,  # True means the fake model wrote the answers
+        "date_utc": stamp,
+        "answer_model": answer_llm.model,
+        "judge_model": judge_llm.model if judge_llm else None,
+        "retriever": args.retriever,
+        "chunking": args.chunking,
+        "k": args.k,
+        "split": args.split,
+        "stopped_early_for_cost": stopped_early,
+        "cost_usd": round(answer_llm.total_cost_usd + (judge_llm.total_cost_usd if judge_llm else 0), 4),
+        **summarise(rows),
+    }
+    with (out_dir / f"{name}.jsonl").open("w", encoding="utf-8") as f:
+        for row in rows:
+            f.write(json.dumps(row, ensure_ascii=False) + "\n")
+    (out_dir / f"{name}_summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False), encoding="utf-8")
+    write_human_review(rows, out_dir / f"{name}_human_review.csv")
+    print(json.dumps(summary, indent=2, ensure_ascii=False))
+    shown = (out_dir / name).relative_to(EVAL_DIR.parent).as_posix()
+    print(f"\nWrote {shown}.jsonl, _summary.json and _human_review.csv; traces in {trace_path.name}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-08",
+  "command": "python -m evals.retrieval_eval ",
+  "questions": 60,
+  "answerable": 50,
+  "corpus": "data/docs/agency (16 fictional help pages, EN+AR)",
+  "chunks": {
+    "section": 90,
+    "small": 216
+  }
+}

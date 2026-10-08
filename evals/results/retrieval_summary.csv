@@ -1,0 +1,43 @@
+config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
+"bm25-plain, section",all answerable,50,0.44,0.64,0.68,0.67,0.552
+"bm25-plain, section",English questions,25,0.4,0.72,0.72,0.72,0.547
+"bm25-plain, section",Arabic questions,25,0.48,0.56,0.64,0.62,0.557
+"bm25-plain, section",same-language,42,0.524,0.762,0.81,0.798,0.657
+"bm25-plain, section","English, same-language",21,0.476,0.857,0.857,0.857,0.651
+"bm25-plain, section","Arabic, same-language",21,0.571,0.667,0.762,0.738,0.664
+"bm25-plain, section",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-normalised, section",all answerable,50,0.46,0.64,0.78,0.77,0.585
+"bm25-normalised, section",English questions,25,0.48,0.68,0.76,0.76,0.598
+"bm25-normalised, section",Arabic questions,25,0.44,0.6,0.8,0.78,0.572
+"bm25-normalised, section",same-language,42,0.548,0.762,0.905,0.893,0.69
+"bm25-normalised, section","English, same-language",21,0.571,0.81,0.905,0.905,0.712
+"bm25-normalised, section","Arabic, same-language",21,0.524,0.714,0.905,0.881,0.669
+"bm25-normalised, section",cross-language,8,0.0,0.0,0.125,0.125,0.031
+"bm25-stemmed, section",all answerable,50,0.5,0.76,0.78,0.77,0.635
+"bm25-stemmed, section",English questions,25,0.48,0.8,0.8,0.8,0.632
+"bm25-stemmed, section",Arabic questions,25,0.52,0.72,0.76,0.74,0.639
+"bm25-stemmed, section",same-language,42,0.595,0.905,0.929,0.917,0.752
+"bm25-stemmed, section","English, same-language",21,0.571,0.952,0.952,0.952,0.752
+"bm25-stemmed, section","Arabic, same-language",21,0.619,0.857,0.905,0.881,0.753
+"bm25-stemmed, section",cross-language,8,0.0,0.0,0.0,0.0,0.021
+"bm25-plain, small",all answerable,50,0.52,0.56,0.66,0.65,0.572
+"bm25-plain, small",English questions,25,0.52,0.6,0.68,0.68,0.584
+"bm25-plain, small",Arabic questions,25,0.52,0.52,0.64,0.62,0.56
+"bm25-plain, small",same-language,42,0.619,0.667,0.786,0.774,0.681
+"bm25-plain, small","English, same-language",21,0.619,0.714,0.81,0.81,0.696
+"bm25-plain, small","Arabic, same-language",21,0.619,0.619,0.762,0.738,0.667
+"bm25-plain, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
+"bm25-normalised, small",all answerable,50,0.5,0.62,0.72,0.71,0.581
+"bm25-normalised, small",English questions,25,0.52,0.72,0.76,0.76,0.615
+"bm25-normalised, small",Arabic questions,25,0.48,0.52,0.68,0.66,0.547
+"bm25-normalised, small",same-language,42,0.595,0.738,0.857,0.845,0.688
+"bm25-normalised, small","English, same-language",21,0.619,0.857,0.905,0.905,0.732
+"bm25-normalised, small","Arabic, same-language",21,0.571,0.619,0.81,0.786,0.643
+"bm25-normalised, small",cross-language,8,0.0,0.0,0.0,0.0,0.021
+"bm25-stemmed, small",all answerable,50,0.54,0.72,0.76,0.75,0.628
+"bm25-stemmed, small",English questions,25,0.56,0.72,0.8,0.8,0.644
+"bm25-stemmed, small",Arabic questions,25,0.52,0.72,0.72,0.7,0.612
+"bm25-stemmed, small",same-language,42,0.643,0.857,0.905,0.893,0.744
+"bm25-stemmed, small","English, same-language",21,0.667,0.857,0.952,0.952,0.767
+"bm25-stemmed, small","Arabic, same-language",21,0.619,0.857,0.857,0.833,0.722
+"bm25-stemmed, small",cross-language,8,0.0,0.0,0.0,0.0,0.018

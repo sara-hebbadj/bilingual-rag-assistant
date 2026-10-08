@@ -1,0 +1,27 @@
+{
+  "run": "DRY_RUN_fake-llm",
+  "NOT_REAL_RESULTS": true,
+  "date_utc": "20261008T112624Z",
+  "answer_model": "fake-llm",
+  "judge_model": "fake-llm",
+  "retriever": "bm25",
+  "chunking": "section",
+  "k": 5,
+  "split": "all",
+  "stopped_early_for_cost": false,
+  "cost_usd": 0.0,
+  "questions": 60,
+  "correct_abstention_on_unanswerable": "2/10",
+  "false_abstention_on_answerable": "1/50",
+  "answered_with_gold_citation": "25/49",
+  "mean_citation_precision": 0.51,
+  "answers_with_invalid_citation": "0/60",
+  "language_match": "49/49",
+  "judge_correct": "49/49",
+  "judge_partial": "0/49",
+  "judge_supported": "49/49",
+  "status_counts": {
+    "answered": 57,
+    "no_sources": 3
+  }
+}

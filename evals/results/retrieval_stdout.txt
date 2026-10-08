@@ -1,0 +1,103 @@
+
+all answerable:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 50 | 0.44 | 0.64 | 0.68 | 0.55 |
+| bm25-normalised, section | 50 | 0.46 | 0.64 | 0.78 | 0.58 |
+| bm25-stemmed, section | 50 | 0.50 | 0.76 | 0.78 | 0.64 |
+| bm25-plain, small | 50 | 0.52 | 0.56 | 0.66 | 0.57 |
+| bm25-normalised, small | 50 | 0.50 | 0.62 | 0.72 | 0.58 |
+| bm25-stemmed, small | 50 | 0.54 | 0.72 | 0.76 | 0.63 |
+
+English questions:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 25 | 0.40 | 0.72 | 0.72 | 0.55 |
+| bm25-normalised, section | 25 | 0.48 | 0.68 | 0.76 | 0.60 |
+| bm25-stemmed, section | 25 | 0.48 | 0.80 | 0.80 | 0.63 |
+| bm25-plain, small | 25 | 0.52 | 0.60 | 0.68 | 0.58 |
+| bm25-normalised, small | 25 | 0.52 | 0.72 | 0.76 | 0.61 |
+| bm25-stemmed, small | 25 | 0.56 | 0.72 | 0.80 | 0.64 |
+
+Arabic questions:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 25 | 0.48 | 0.56 | 0.64 | 0.56 |
+| bm25-normalised, section | 25 | 0.44 | 0.60 | 0.80 | 0.57 |
+| bm25-stemmed, section | 25 | 0.52 | 0.72 | 0.76 | 0.64 |
+| bm25-plain, small | 25 | 0.52 | 0.52 | 0.64 | 0.56 |
+| bm25-normalised, small | 25 | 0.48 | 0.52 | 0.68 | 0.55 |
+| bm25-stemmed, small | 25 | 0.52 | 0.72 | 0.72 | 0.61 |
+
+same-language:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 42 | 0.52 | 0.76 | 0.81 | 0.66 |
+| bm25-normalised, section | 42 | 0.55 | 0.76 | 0.91 | 0.69 |
+| bm25-stemmed, section | 42 | 0.59 | 0.91 | 0.93 | 0.75 |
+| bm25-plain, small | 42 | 0.62 | 0.67 | 0.79 | 0.68 |
+| bm25-normalised, small | 42 | 0.59 | 0.74 | 0.86 | 0.69 |
+| bm25-stemmed, small | 42 | 0.64 | 0.86 | 0.91 | 0.74 |
+
+English, same-language:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 21 | 0.48 | 0.86 | 0.86 | 0.65 |
+| bm25-normalised, section | 21 | 0.57 | 0.81 | 0.91 | 0.71 |
+| bm25-stemmed, section | 21 | 0.57 | 0.95 | 0.95 | 0.75 |
+| bm25-plain, small | 21 | 0.62 | 0.71 | 0.81 | 0.70 |
+| bm25-normalised, small | 21 | 0.62 | 0.86 | 0.91 | 0.73 |
+| bm25-stemmed, small | 21 | 0.67 | 0.86 | 0.95 | 0.77 |
+
+Arabic, same-language:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 21 | 0.57 | 0.67 | 0.76 | 0.66 |
+| bm25-normalised, section | 21 | 0.52 | 0.71 | 0.91 | 0.67 |
+| bm25-stemmed, section | 21 | 0.62 | 0.86 | 0.91 | 0.75 |
+| bm25-plain, small | 21 | 0.62 | 0.62 | 0.76 | 0.67 |
+| bm25-normalised, small | 21 | 0.57 | 0.62 | 0.81 | 0.64 |
+| bm25-stemmed, small | 21 | 0.62 | 0.86 | 0.86 | 0.72 |
+
+cross-language:
+| config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
+|---|---|---|---|---|---|
+| bm25-plain, section | 8 | 0.00 | 0.00 | 0.00 | 0.00 |
+| bm25-normalised, section | 8 | 0.00 | 0.00 | 0.12 | 0.03 |
+| bm25-stemmed, section | 8 | 0.00 | 0.00 | 0.00 | 0.02 |
+| bm25-plain, small | 8 | 0.00 | 0.00 | 0.00 | 0.00 |
+| bm25-normalised, small | 8 | 0.00 | 0.00 | 0.00 | 0.02 |
+| bm25-stemmed, small | 8 | 0.00 | 0.00 | 0.00 | 0.02 |
+
+BM25 score gate (bm25-stemmed, section): {
+  "threshold_chosen_on_dev": 4.6036,
+  "dev": {
+    "unanswerable_abstained": "4/4",
+    "answerable_wrongly_abstained": "2/16",
+    "balanced_accuracy": 0.938
+  },
+  "test": {
+    "unanswerable_abstained": "2/6",
+    "answerable_wrongly_abstained": "4/34",
+    "balanced_accuracy": 0.608
+  },
+  "top_score_by_type_all_60": {
+    "same_lang": {
+      "min": 0.0,
+      "median": 10.8793,
+      "max": 25.4135
+    },
+    "cross_lang": {
+      "min": 7.5128,
+      "median": 8.9599,
+      "max": 13.9604
+    },
+    "unanswerable": {
+      "min": 0.0,
+      "median": 4.6036,
+      "max": 9.1635
+    }
+  }
+}
+
+Wrote results to evals/results
