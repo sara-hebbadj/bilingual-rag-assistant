@@ -6,9 +6,21 @@ Answers customer questions from a travel agency's help pages in Arabic or Englis
 
 ## 1. Demo
 
-Demo video/Space: pending — to be recorded by Sara.
+Live hosted demo: coming soon (Hugging Face Space).
 
-GIF: pending. Without an API key the demo runs in "search only" mode, which shows the passages retrieved for a question.
+Screenshots from a local run on 8 October 2026 in "Answer with sources" mode, with live AI (`openai/gpt-6-luna` through OpenRouter, the model used in the results below). Without an API key the demo runs in "search only" mode, which shows the passages retrieved for a question.
+
+![An English answer with a citation, then "I don't know" for a question the pages do not cover](docs/demo/demo.gif)
+*An English question is answered with a citation, then a question the help pages do not cover gets "I don't know".*
+
+![English answer with its source](docs/demo/english-answer-citations.png)
+*English answer with its citation [S1] and the help page it came from.*
+
+![Arabic answer with its source](docs/demo/arabic-answer-citations.png)
+*Arabic question about the fee for changing a trip date: the answer cites the Arabic help page.*
+
+![The assistant says I don't know and lists the passages it searched](docs/demo/i-dont-know.png)
+*"Can I bring my cat on the plane?" is not in the help pages, so the assistant says "I don't know" and lists the passages it searched.*
 
 ## 2. The problem
 

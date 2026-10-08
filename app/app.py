@@ -4,10 +4,12 @@
 
 Without an API key the demo still works in "Search only" mode: it shows the
 passages BM25 retrieves, which is useful for checking retrieval by eye.
+On a Hugging Face Space: add OPENROUTER_API_KEY as a secret and MODEL_MAIN as a variable.
 """
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -38,6 +40,12 @@ Answers come **only** from the help pages, with a citation for each fact, and th
 "I don't know" when the pages do not cover a question.
 _Sarab Travel is a **fictional** agency: every policy here is made up for this demo._"""
 
+DEMO_MODE_NOTE = (
+    "**Demo mode — live AI is off; add OPENROUTER_API_KEY in Space settings to enable** (plus a "
+    "`MODEL_MAIN` variable). Until then only **Search only** mode works: it shows the help-page "
+    "passages the BM25 search finds, without a generated answer."
+)
+
 
 def render_search(hits) -> str:
     if not hits:
@@ -67,7 +75,8 @@ def make_responder(assistant):
 
 def build_demo(llm=None) -> gr.Blocks:
     if llm is None and has_llm_config():
-        llm = LLMClient.from_env("main", trace_path=REPO_ROOT / "evals" / "app_traces.jsonl")
+        role = "main" if os.getenv("MODEL_MAIN") else "cheap"  # has_llm_config() accepts either model
+        llm = LLMClient.from_env(role, trace_path=REPO_ROOT / "evals" / "app_traces.jsonl")
     assistant = build_assistant(AssistantConfig(), llm=llm)
     modes = [ANSWER_MODE, SEARCH_MODE] if llm else [SEARCH_MODE]
     respond = make_responder(assistant)
@@ -75,7 +84,7 @@ def build_demo(llm=None) -> gr.Blocks:
     with gr.Blocks(title="Bilingual RAG assistant") as demo:
         gr.Markdown(INTRO)
         if llm is None:
-            gr.Markdown("_No OPENROUTER_API_KEY found, so only search mode is available._")
+            gr.Markdown(DEMO_MODE_NOTE)
         mode = gr.Radio(modes, value=modes[0], label="Mode")
         chatbot = gr.Chatbot(height=460, label="Conversation")
         textbox = gr.Textbox(placeholder="Ask a question / اكتب سؤالك", label="Question", lines=1)
