@@ -4,10 +4,10 @@ all answerable:
 |---|---|---|---|---|---|
 | bm25-plain, section | 50 | 0.52 | 0.60 | 0.64 | 0.57 |
 | bm25-normalised, section | 50 | 0.50 | 0.64 | 0.68 | 0.59 |
-| bm25-stemmed, section | 50 | 0.50 | 0.72 | 0.78 | 0.62 |
+| bm25-stemmed, section | 50 | 0.50 | 0.72 | 0.76 | 0.62 |
 | bm25-plain, small | 50 | 0.52 | 0.54 | 0.60 | 0.55 |
 | bm25-normalised, small | 50 | 0.50 | 0.58 | 0.64 | 0.56 |
-| bm25-stemmed, small | 50 | 0.52 | 0.62 | 0.74 | 0.60 |
+| bm25-stemmed, small | 50 | 0.52 | 0.62 | 0.72 | 0.59 |
 | embedding, section | 50 | 0.94 | 1.00 | 1.00 | 0.97 |
 | hybrid, section | 50 | 0.76 | 0.86 | 0.92 | 0.83 |
 | embedding, small | 50 | 0.92 | 0.98 | 1.00 | 0.95 |
@@ -32,10 +32,10 @@ Arabic questions:
 |---|---|---|---|---|---|
 | bm25-plain, section | 25 | 0.52 | 0.56 | 0.64 | 0.56 |
 | bm25-normalised, section | 25 | 0.52 | 0.64 | 0.68 | 0.61 |
-| bm25-stemmed, section | 25 | 0.52 | 0.72 | 0.80 | 0.64 |
+| bm25-stemmed, section | 25 | 0.52 | 0.72 | 0.76 | 0.64 |
 | bm25-plain, small | 25 | 0.52 | 0.52 | 0.60 | 0.55 |
 | bm25-normalised, small | 25 | 0.48 | 0.52 | 0.64 | 0.54 |
-| bm25-stemmed, small | 25 | 0.52 | 0.68 | 0.76 | 0.62 |
+| bm25-stemmed, small | 25 | 0.52 | 0.68 | 0.72 | 0.61 |
 | embedding, section | 25 | 0.96 | 1.00 | 1.00 | 0.98 |
 | hybrid, section | 25 | 0.76 | 0.88 | 0.96 | 0.84 |
 | embedding, small | 25 | 0.92 | 1.00 | 1.00 | 0.95 |
@@ -46,10 +46,10 @@ same-language:
 |---|---|---|---|---|---|
 | bm25-plain, section | 42 | 0.62 | 0.71 | 0.76 | 0.68 |
 | bm25-normalised, section | 42 | 0.59 | 0.76 | 0.81 | 0.70 |
-| bm25-stemmed, section | 42 | 0.59 | 0.86 | 0.93 | 0.73 |
+| bm25-stemmed, section | 42 | 0.59 | 0.86 | 0.91 | 0.73 |
 | bm25-plain, small | 42 | 0.62 | 0.64 | 0.71 | 0.66 |
 | bm25-normalised, small | 42 | 0.59 | 0.69 | 0.76 | 0.67 |
-| bm25-stemmed, small | 42 | 0.62 | 0.74 | 0.88 | 0.71 |
+| bm25-stemmed, small | 42 | 0.62 | 0.74 | 0.86 | 0.71 |
 | embedding, section | 42 | 0.95 | 1.00 | 1.00 | 0.98 |
 | hybrid, section | 42 | 0.88 | 1.00 | 1.00 | 0.94 |
 | embedding, small | 42 | 0.93 | 0.98 | 1.00 | 0.95 |
@@ -74,14 +74,14 @@ Arabic, same-language:
 |---|---|---|---|---|---|
 | bm25-plain, section | 21 | 0.62 | 0.67 | 0.76 | 0.67 |
 | bm25-normalised, section | 21 | 0.62 | 0.76 | 0.81 | 0.72 |
-| bm25-stemmed, section | 21 | 0.62 | 0.86 | 0.95 | 0.76 |
+| bm25-stemmed, section | 21 | 0.62 | 0.86 | 0.91 | 0.75 |
 | bm25-plain, small | 21 | 0.62 | 0.62 | 0.71 | 0.66 |
 | bm25-normalised, small | 21 | 0.57 | 0.62 | 0.76 | 0.65 |
-| bm25-stemmed, small | 21 | 0.62 | 0.81 | 0.91 | 0.74 |
+| bm25-stemmed, small | 21 | 0.62 | 0.81 | 0.86 | 0.73 |
 | embedding, section | 21 | 0.95 | 1.00 | 1.00 | 0.98 |
 | hybrid, section | 21 | 0.86 | 1.00 | 1.00 | 0.93 |
 | embedding, small | 21 | 0.91 | 1.00 | 1.00 | 0.94 |
-| hybrid, small | 21 | 0.86 | 1.00 | 1.00 | 0.93 |
+| hybrid, small | 21 | 0.86 | 1.00 | 1.00 | 0.92 |
 
 cross-language:
 | config | n | hit@1 | hit@3 | hit@5 | MRR@10 |
@@ -95,7 +95,7 @@ cross-language:
 | embedding, section | 8 | 0.88 | 1.00 | 1.00 | 0.94 |
 | hybrid, section | 8 | 0.12 | 0.12 | 0.50 | 0.26 |
 | embedding, small | 8 | 0.88 | 1.00 | 1.00 | 0.92 |
-| hybrid, small | 8 | 0.00 | 0.38 | 0.50 | 0.23 |
+| hybrid, small | 8 | 0.00 | 0.38 | 0.50 | 0.24 |
 
 public-page questions:
 | config | n | hit@1 | hit@3 | hit@5 | MRR@10 |

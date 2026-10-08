@@ -6,7 +6,9 @@ Answers customer questions from a travel agency's help pages in Arabic or Englis
 
 ## 1. Demo
 
-Live hosted demo: coming soon (Hugging Face Space).
+**Live demo:** [huggingface.co/spaces/sarahebbadj/bilingual-rag-assistant](https://huggingface.co/spaces/sarahebbadj/bilingual-rag-assistant) (works without an API key, in demo mode).
+
+To enable live AI on your own copy: add `OPENROUTER_API_KEY` as a Space secret (and `MODEL_MAIN` as a variable).
 
 Screenshots from a local run on 8 October 2026 in "Answer with sources" mode, with live AI (`openai/gpt-6-luna` through OpenRouter, the model used in the results below). Without an API key the demo runs in "search only" mode, which shows the passages retrieved for a question.
 
@@ -79,13 +81,13 @@ More detail: [docs/architecture.md](docs/architecture.md).
 
 Command: `python -m evals.retrieval_eval`. Corpus: the 16 fictional agency pages (90 section chunks). Questions: the 50 answerable questions in `evals/questions.jsonl` (the 10 unanswerable ones have no gold passage). A hit means a chunk from a gold section is in the top k. Outputs: `evals/results/`.
 
-Default configuration (BM25, light stemming, one chunk per section):
+Default configuration (BM25, light stemming, one chunk per section), after the Arabic stemmer fix described in section 6 (the first run's number is shown as "before → after" where it changed; before: `evals/results/before_stemmer_fix/`):
 
 | Question group | n | hit@1 | hit@3 | hit@5 | MRR@10 |
 |---|---|---|---|---|---|
-| All answerable | 50 | 0.50 | 0.76 | 0.78 | 0.64 |
+| All answerable | 50 | 0.50 | 0.76 → 0.78 | 0.78 → 0.80 | 0.64 |
 | English, same-language | 21 | 0.57 | 0.95 | 0.95 | 0.75 |
-| Arabic, same-language | 21 | 0.62 | 0.86 | 0.91 | 0.75 |
+| Arabic, same-language | 21 | 0.62 | 0.86 → 0.91 | 0.91 → 0.95 | 0.75 → 0.77 |
 | Cross-language (answer only in the other language) | 8 | 0.00 | 0.00 | 0.00 | 0.02 |
 
 Experiment 1, text analyzer and chunk size (all 50 answerable questions; hit@5 / MRR@10):
@@ -94,9 +96,9 @@ Experiment 1, text analyzer and chunk size (all 50 answerable questions; hit@5 /
 |---|---|---|
 | Plain (lowercase only) | 0.68 / 0.55 | 0.66 / 0.57 |
 | + Arabic normalisation and stopwords | 0.78 / 0.58 | 0.72 / 0.58 |
-| + light stemming (default) | 0.78 / 0.64 | 0.76 / 0.63 |
+| + light stemming (default) | 0.80 / 0.64 (before the stemmer fix: 0.78 / 0.64) | 0.78 / 0.63 (before: 0.76 / 0.63) |
 
-On the 21 Arabic same-language questions, normalisation moved hit@5 from 0.76 to 0.91 (16 → 19 questions). With about 20 questions per group, one question is about 5 points, so treat small differences as noise.
+On the 21 Arabic same-language questions, normalisation moved hit@5 from 0.76 to 0.91 (16 → 19 questions), and light stemming to 0.95 (20; 19 before the stemmer fix). With about 20 questions per group, one question is about 5 points, so treat small differences as noise.
 
 ![Retrieval hit@5 by analyzer](evals/results/retrieval_hit5.png)
 
@@ -106,7 +108,7 @@ Experiment 3, keyword vs embedding vs hybrid (live, 2026-10-08). Embeddings: `ba
 
 | Retriever | All answerable (50): hit@1 / hit@5 / MRR@10 | English same-lang (21): hit@5 | Arabic same-lang (21): hit@5 | Cross-language (8): hit@5 |
 |---|---|---|---|---|
-| BM25, stemmed (default) | 0.50 / 0.78 / 0.64 | 0.95 | 0.91 | 0.00 |
+| BM25, stemmed (default) | 0.50 / 0.80 / 0.64 (before the stemmer fix: 0.50 / 0.78 / 0.64) | 0.95 | 0.95 (before: 0.91) | 0.00 |
 | Embeddings (bge-m3) | 0.94 / 1.00 / 0.97 | 1.00 | 1.00 | 1.00 |
 | Hybrid, BM25 + embeddings (RRF) | 0.78 / 0.88 / 0.83 | 1.00 | 1.00 | 0.25 |
 
@@ -118,15 +120,15 @@ Experiment 4, a bigger corpus: the 8 public pages added as distractors (299 sect
 
 | Retriever | Original 50 answerable, hit@5 / MRR@10: agency pages only → with public pages | 10 public-page questions: hit@5 / MRR@10 |
 |---|---|---|
-| BM25, stemmed | 0.78 / 0.64 → 0.76 / 0.62 | 0.60 / 0.52 |
+| BM25, stemmed | 0.80 / 0.64 → 0.78 / 0.62 (before the stemmer fix: 0.78 / 0.64 → 0.76 / 0.62) | 0.60 / 0.52 |
 | Embeddings (bge-m3) | 1.00 / 0.97 → 1.00 / 0.97 | 0.90 / 0.90 |
 | Hybrid (RRF) | 0.88 / 0.83 → 0.92 / 0.83 | 0.80 / 0.62 |
 
-The BM25 numbers on the agency-only corpus re-ran identically after this session's code changes (`evals/results/retrieval_summary.csv`).
+Both retrieval runs were repeated on 2026-10-08 after the Arabic stemmer fix (section 6) with the same commands: only the BM25 "stemmed" rows and the hybrid small-chunk MRR (±0.01) changed; embeddings and the section-chunk hybrid rows are identical, and so is the score-threshold experiment. Current results: `evals/results/retrieval_summary.csv` and `evals/results/agency_plus_public/`; first run: `evals/results/before_stemmer_fix/`. Embedding cost of the two re-runs: about US$0.00002.
 
 ### Answers, measured live on 2026-10-08
 
-Answer model `openai/gpt-6-luna` (MODEL_CHEAP), judge `google/gemini-3.8-flash` (MODEL_JUDGE, a different model family), top 5 section chunks, temperature 0, the 60 questions in `evals/questions.jsonl` (50 answerable, 10 unanswerable), agency pages only. Command: `python -m evals.run --model cheap` with `--retriever bm25` (the default), `embedding` or `hybrid` (the last two with `EMBEDDING_MODEL=baai/bge-m3`). Per-question rows, summaries and 20-answer review sheets: `evals/results/run_20261008T*`. Every model call (tokens, cost, latency): `evals/traces.jsonl`. `python -m evals.compare_runs` rebuilds `evals/results/live_runs_comparison.csv` from the saved rows.
+Answer model `openai/gpt-6-luna` (MODEL_CHEAP), judge `google/gemini-3.8-flash` (MODEL_JUDGE, a different model family), top 5 section chunks, temperature 0, the 60 questions in `evals/questions.jsonl` (50 answerable, 10 unanswerable), agency pages only. These settings are the evaluation's, not the demo's: the demo and the terminal command use `MODEL_MAIN` and also search the public pages (see section 7). The BM25 and hybrid answer runs used the Arabic stemmer **before** the fix in section 6 (they were not re-run); the embeddings run does not use the stemmer. Command: `python -m evals.run --model cheap` with `--retriever bm25` (the default), `embedding` or `hybrid` (the last two with `EMBEDDING_MODEL=baai/bge-m3`). Per-question rows, summaries and 20-answer review sheets: `evals/results/run_20261008T*`. Every model call (tokens, cost, latency): `evals/traces.jsonl`. `python -m evals.compare_runs` rebuilds `evals/results/live_runs_comparison.csv` from the saved rows.
 
 | Metric | BM25 (default) | Embeddings (bge-m3) | Hybrid (RRF) |
 |---|---|---|---|
@@ -194,6 +196,7 @@ Live run on 2026-10-08 (coding agent; run files in `evals/results/`). No prompt 
 - **The code-level citation rule caught one non-answer.** In the first BM25 run the model wrote "The help pages do not say whether cats can travel in the cabin…" instead of the exact `NOT_IN_SOURCES` marker. It had no citation, so the user saw "I don't know" (status `ungrounded`), as designed.
 - **Process.** One hybrid run was stopped part-way by a 10-minute time limit on the agent's command (13 calls, US$0.007, in `evals/traces.jsonl` without a results file) and was re-run in the background. Trace records now carry the run name so every call can be matched to its run.
 - **Supporting changes:** `--collections` and `--questions` options for both evaluation scripts; per-question latency, cost, cited-passage language and an "all citations gold" check in `evals/run.py`; embedding cost tracking; `evals/compare_runs.py`; the chart legend moved so it no longer covers a bar label.
+- **The Arabic stemmer split "cancellation" in two** (found in a review after the live run). After normalisation, إلغاء becomes الغاء, which looks like the article ال + غاء, so the stemmer turned إلغاء into غاء but الإلغاء ("the cancellation") into الغاء: the two never matched, and "كيف أعرف أن إلغاء حجزي تمّ فعلاً؟" (ar-07) could not find the cancellation page that says الإلغاء. **Change:** `light_stem_arabic` strips a second ال after a prefix, so both forms (and بالإلغاء, للإلغاء, and الإلكترونية / إلكترونية) give the same stem; one new test in `tests/test_textnorm.py`. Re-running `python -m evals.retrieval_eval` moved BM25 hit@5 on all 50 answerable questions from 0.78 to 0.80 and on the 21 Arabic same-language questions from 0.91 to 0.95 (ar-07 went from rank 9 to rank 2); the tables in section 5 show both. The LLM answer runs were not repeated, so their BM25 and hybrid numbers are from the old stemmer.
 
 > TODO (Sara): list what you changed after reviewing (code, prompt, Arabic wording of documents and questions) and what the live run showed.
 
@@ -216,6 +219,8 @@ export EMBEDDING_MODEL=baai/bge-m3              # the embeddings model measured 
 python -m evals.retrieval_eval --with-embeddings && python -m evals.run --model cheap --retriever embedding
 python -m bilingual_rag "كم يستغرق استرداد المبلغ؟"   # one question from the terminal
 ```
+
+**The demo and the terminal command are not set up like the measured runs.** `python app/app.py` and `python -m bilingual_rag` answer with `MODEL_MAIN` (the app uses `MODEL_CHEAP` only when `MODEL_MAIN` is not set; the terminal command takes `--model cheap`), use BM25, and search the agency pages **and** the 8 public pages (the default `collections` in `AssistantConfig`). The answer results in section 5 were measured with `MODEL_CHEAP` (`openai/gpt-6-luna`) on the agency pages only, apart from the separate table with the public pages. So an answer in the demo can differ from the evaluation, and a public page can answer a question the agency pages do not cover (section 6).
 
 ## 8. Data and licence
 

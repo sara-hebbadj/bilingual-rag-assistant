@@ -43,6 +43,18 @@ def test_stemmed_forms_match_across_spellings():
     assert tokenize("refunds", "stemmed") == tokenize("refund", "stemmed")
 
 
+def test_words_starting_with_hamza_alef_lam_match_their_definite_form():
+    # إلغاء becomes الغاء after normalisation, which looks like "the" + غاء.
+    # Before the fix: إلغاء -> غاء but الإلغاء -> الغاء, so they never matched.
+    bare = tokenize("إلغاء", "stemmed")
+    assert bare == ["غاء"]
+    for form in ("الإلغاء", "والإلغاء", "بالإلغاء", "للإلغاء", "الغاء"):
+        assert tokenize(form, "stemmed") == bare, form
+    assert tokenize("الإلكترونية", "stemmed") == tokenize("إلكترونية", "stemmed")
+    # Words without that pattern are unchanged.
+    assert light_stem_arabic(normalize("والأمتعة")) == "امتع"
+
+
 def test_detect_language():
     assert detect_language("كم يستغرق الاسترداد؟") == "ar"
     assert detect_language("How long does a refund take?") == "en"

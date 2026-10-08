@@ -13,12 +13,12 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "bm25-normalised, section","English, same-language",21,0.571,0.81,0.905,0.905,0.712
 "bm25-normalised, section","Arabic, same-language",21,0.524,0.714,0.905,0.881,0.669
 "bm25-normalised, section",cross-language,8,0.0,0.0,0.125,0.125,0.031
-"bm25-stemmed, section",all answerable,50,0.5,0.78,0.8,0.79,0.643
+"bm25-stemmed, section",all answerable,50,0.5,0.76,0.78,0.77,0.635
 "bm25-stemmed, section",English questions,25,0.48,0.8,0.8,0.8,0.632
-"bm25-stemmed, section",Arabic questions,25,0.52,0.76,0.8,0.78,0.655
-"bm25-stemmed, section",same-language,42,0.595,0.929,0.952,0.94,0.762
+"bm25-stemmed, section",Arabic questions,25,0.52,0.72,0.76,0.74,0.639
+"bm25-stemmed, section",same-language,42,0.595,0.905,0.929,0.917,0.752
 "bm25-stemmed, section","English, same-language",21,0.571,0.952,0.952,0.952,0.752
-"bm25-stemmed, section","Arabic, same-language",21,0.619,0.905,0.952,0.929,0.771
+"bm25-stemmed, section","Arabic, same-language",21,0.619,0.857,0.905,0.881,0.753
 "bm25-stemmed, section",cross-language,8,0.0,0.0,0.0,0.0,0.021
 "bm25-plain, small",all answerable,50,0.52,0.56,0.66,0.65,0.572
 "bm25-plain, small",English questions,25,0.52,0.6,0.68,0.68,0.584
@@ -34,12 +34,12 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "bm25-normalised, small","English, same-language",21,0.619,0.857,0.905,0.905,0.732
 "bm25-normalised, small","Arabic, same-language",21,0.571,0.619,0.81,0.786,0.643
 "bm25-normalised, small",cross-language,8,0.0,0.0,0.0,0.0,0.021
-"bm25-stemmed, small",all answerable,50,0.54,0.74,0.78,0.77,0.632
+"bm25-stemmed, small",all answerable,50,0.54,0.72,0.76,0.75,0.628
 "bm25-stemmed, small",English questions,25,0.56,0.72,0.8,0.8,0.644
-"bm25-stemmed, small",Arabic questions,25,0.52,0.76,0.76,0.74,0.619
-"bm25-stemmed, small",same-language,42,0.643,0.881,0.929,0.917,0.748
+"bm25-stemmed, small",Arabic questions,25,0.52,0.72,0.72,0.7,0.612
+"bm25-stemmed, small",same-language,42,0.643,0.857,0.905,0.893,0.744
 "bm25-stemmed, small","English, same-language",21,0.667,0.857,0.952,0.952,0.767
-"bm25-stemmed, small","Arabic, same-language",21,0.619,0.905,0.905,0.881,0.73
+"bm25-stemmed, small","Arabic, same-language",21,0.619,0.857,0.857,0.833,0.722
 "bm25-stemmed, small",cross-language,8,0.0,0.0,0.0,0.0,0.018
 "embedding, section",all answerable,50,0.94,1.0,1.0,0.99,0.97
 "embedding, section",English questions,25,0.92,1.0,1.0,1.0,0.96
@@ -62,10 +62,10 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "embedding, small","English, same-language",21,0.952,0.952,1.0,1.0,0.962
 "embedding, small","Arabic, same-language",21,0.905,1.0,1.0,0.976,0.944
 "embedding, small",cross-language,8,0.875,1.0,1.0,1.0,0.917
-"hybrid, small",all answerable,50,0.76,0.88,0.9,0.89,0.831
+"hybrid, small",all answerable,50,0.76,0.88,0.9,0.89,0.828
 "hybrid, small",English questions,25,0.76,0.84,0.84,0.84,0.815
-"hybrid, small",Arabic questions,25,0.76,0.92,0.96,0.94,0.848
-"hybrid, small",same-language,42,0.881,1.0,1.0,0.988,0.937
+"hybrid, small",Arabic questions,25,0.76,0.92,0.96,0.94,0.842
+"hybrid, small",same-language,42,0.881,1.0,1.0,0.988,0.933
 "hybrid, small","English, same-language",21,0.905,1.0,1.0,1.0,0.944
-"hybrid, small","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.929
-"hybrid, small",cross-language,8,0.125,0.25,0.375,0.375,0.279
+"hybrid, small","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.921
+"hybrid, small",cross-language,8,0.125,0.25,0.375,0.375,0.281

@@ -9,6 +9,6 @@
     "small": 216
   },
   "embedding_model": "baai/bge-m3",
-  "embedding_cost_usd": 1e-05,
-  "embedding_tokens": 1018
+  "embedding_cost_usd": 0.000191,
+  "embedding_tokens": 19086
 }

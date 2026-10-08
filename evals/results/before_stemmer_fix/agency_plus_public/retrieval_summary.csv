@@ -17,12 +17,12 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "bm25-normalised, section",cross-language,8,0.0,0.0,0.0,0.0,0.021
 "bm25-normalised, section",public-page questions,10,0.4,0.6,0.6,0.55,0.5
 "bm25-normalised, section","public-page, cross-language",5,0.0,0.2,0.2,0.2,0.1
-"bm25-stemmed, section",all answerable,50,0.5,0.72,0.78,0.77,0.618
+"bm25-stemmed, section",all answerable,50,0.5,0.72,0.76,0.75,0.616
 "bm25-stemmed, section",English questions,25,0.48,0.72,0.76,0.76,0.594
-"bm25-stemmed, section",Arabic questions,25,0.52,0.72,0.8,0.78,0.641
-"bm25-stemmed, section",same-language,42,0.595,0.857,0.929,0.917,0.732
+"bm25-stemmed, section",Arabic questions,25,0.52,0.72,0.76,0.74,0.637
+"bm25-stemmed, section",same-language,42,0.595,0.857,0.905,0.893,0.73
 "bm25-stemmed, section","English, same-language",21,0.571,0.857,0.905,0.905,0.708
-"bm25-stemmed, section","Arabic, same-language",21,0.619,0.857,0.952,0.929,0.757
+"bm25-stemmed, section","Arabic, same-language",21,0.619,0.857,0.905,0.881,0.752
 "bm25-stemmed, section",cross-language,8,0.0,0.0,0.0,0.0,0.016
 "bm25-stemmed, section",public-page questions,10,0.5,0.5,0.6,0.55,0.52
 "bm25-stemmed, section","public-page, cross-language",5,0.0,0.0,0.2,0.2,0.04
@@ -44,12 +44,12 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "bm25-normalised, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
 "bm25-normalised, small",public-page questions,10,0.5,0.6,0.6,0.55,0.55
 "bm25-normalised, small","public-page, cross-language",5,0.2,0.2,0.2,0.2,0.2
-"bm25-stemmed, small",all answerable,50,0.52,0.62,0.74,0.73,0.597
+"bm25-stemmed, small",all answerable,50,0.52,0.62,0.72,0.71,0.595
 "bm25-stemmed, small",English questions,25,0.52,0.56,0.72,0.72,0.575
-"bm25-stemmed, small",Arabic questions,25,0.52,0.68,0.76,0.74,0.618
-"bm25-stemmed, small",same-language,42,0.619,0.738,0.881,0.869,0.71
+"bm25-stemmed, small",Arabic questions,25,0.52,0.68,0.72,0.7,0.615
+"bm25-stemmed, small",same-language,42,0.619,0.738,0.857,0.845,0.708
 "bm25-stemmed, small","English, same-language",21,0.619,0.667,0.857,0.857,0.685
-"bm25-stemmed, small","Arabic, same-language",21,0.619,0.81,0.905,0.881,0.736
+"bm25-stemmed, small","Arabic, same-language",21,0.619,0.81,0.857,0.833,0.732
 "bm25-stemmed, small",cross-language,8,0.0,0.0,0.0,0.0,0.0
 "bm25-stemmed, small",public-page questions,10,0.5,0.6,0.6,0.55,0.533
 "bm25-stemmed, small","public-page, cross-language",5,0.0,0.2,0.2,0.2,0.067
@@ -80,12 +80,12 @@ config,subset,n,hit@1,hit@3,hit@5,recall@5,mrr@10
 "embedding, small",cross-language,8,0.875,1.0,1.0,1.0,0.917
 "embedding, small",public-page questions,10,0.7,0.7,0.9,0.85,0.745
 "embedding, small","public-page, cross-language",5,0.4,0.4,0.8,0.8,0.49
-"hybrid, small",all answerable,50,0.74,0.9,0.92,0.91,0.821
+"hybrid, small",all answerable,50,0.74,0.9,0.92,0.91,0.818
 "hybrid, small",English questions,25,0.76,0.84,0.88,0.88,0.81
-"hybrid, small",Arabic questions,25,0.72,0.96,0.96,0.94,0.831
-"hybrid, small",same-language,42,0.881,1.0,1.0,0.988,0.933
+"hybrid, small",Arabic questions,25,0.72,0.96,0.96,0.94,0.826
+"hybrid, small",same-language,42,0.881,1.0,1.0,0.988,0.929
 "hybrid, small","English, same-language",21,0.905,1.0,1.0,1.0,0.937
-"hybrid, small","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.929
-"hybrid, small",cross-language,8,0.0,0.375,0.5,0.5,0.234
+"hybrid, small","Arabic, same-language",21,0.857,1.0,1.0,0.976,0.921
+"hybrid, small",cross-language,8,0.0,0.375,0.5,0.5,0.238
 "hybrid, small",public-page questions,10,0.6,0.7,0.7,0.65,0.671
 "hybrid, small","public-page, cross-language",5,0.2,0.4,0.4,0.4,0.342

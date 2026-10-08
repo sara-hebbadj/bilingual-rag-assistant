@@ -87,6 +87,12 @@ def light_stem_arabic(word: str) -> str:
         if word.startswith(prefix) and len(word) - len(prefix) >= 2:
             word = word[len(prefix) :]
             break
+    # Words that begin with إل/أل/آل, like إلغاء ("cancellation"), look like they
+    # start with the article once alef is normalised (الغاء), so the bare word
+    # already lost "ال" above (-> غاء). Strip one more "ال" so the definite form
+    # meets it: الإلغاء -> الالغاء -> الغاء -> غاء.
+    if word.startswith("ال") and len(word) - 2 >= 2:
+        word = word[2:]
     for suffix in _AR_SUFFIXES:
         if word.endswith(suffix) and len(word) - len(suffix) >= 2:
             word = word[: -len(suffix)]

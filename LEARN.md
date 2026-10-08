@@ -14,18 +14,18 @@ For Sara. Do the walkthrough out loud twice before an interview, then answer the
 
 **6:00 – Answering and grounding (2 min).** `answer.py`: sources are numbered [S1]..[S5]; the rules say answer only from them, cite, reply in the question's language, or say NOT_IN_SOURCES. Then the code checks: no citation → the answer is blocked. "The prompt asks; the code enforces."
 
-**8:00 – Results (2 min).** Open `evals/results/retrieval_hit5.png` and the README table. "Same-language hit@5 is 0.95 in English and 0.91 in Arabic; normalisation took Arabic from 0.76 to 0.91. Cross-language is 0 of 8 with BM25, which is why the next step is embeddings. A score threshold for 'I don't know' worked on dev but not on test, so I left it off." Then the live run (README section 5): with embeddings, 44/50 answers judged correct, 10/10 correct "I don't know", 8/8 cross-language correct; with BM25 32/50 and 0/8 cross-language. Mention that the judge is a model, not a person, and finish with what you would do next.
+**8:00 – Results (2 min).** Open `evals/results/retrieval_hit5.png` and the README table. "Same-language hit@5 is 0.95 in English and 0.95 in Arabic (0.91 before I fixed the إلغاء / الإلغاء stemmer bug); normalisation took Arabic from 0.76 to 0.91. Cross-language is 0 of 8 with BM25, which is why the next step is embeddings. A score threshold for 'I don't know' worked on dev but not on test, so I left it off." Then the live run (README section 5): with embeddings, 44/50 answers judged correct, 10/10 correct "I don't know", 8/8 cross-language correct; with BM25 32/50 and 0/8 cross-language. Mention that the judge is a model, not a person, and finish with what you would do next.
 
 ## Ten interview questions with short answers
 
 1. **Why start with BM25 instead of embeddings?**
-   It needs no model download or API, it is fast, and it is a strong baseline for exact terms such as fees, "Lite fare" or "PIR". It also gives a number to beat: any embedding model must improve on 0.78 hit@5.
+   It needs no model download or API, it is fast, and it is a strong baseline for exact terms such as fees, "Lite fare" or "PIR". It also gives a number to beat: any embedding model must improve on 0.80 hit@5.
 
 2. **What does Arabic do to keyword search?**
    The same word can be typed several ways (أ/ا, ة/ه, ى/ي, with or without diacritics), and words carry attached prefixes and suffixes (و، ال، ب، ها، ات). Without normalisation these never match. Here normalisation took Arabic same-language hit@5 from 0.76 to 0.91.
 
 3. **What is light stemming and where does it fail?**
-   It strips common prefixes and suffixes without finding the root. It fails on possessives (مشكلتي vs مشكلة), verb vs noun forms (أصعّد vs تصعيد) and broken plurals (شكوى vs شكاوى); the complaint question in the test set fails for exactly these reasons.
+   It strips common prefixes and suffixes without finding the root. It fails on possessives (مشكلتي vs مشكلة), verb vs noun forms (أصعّد vs تصعيد) and broken plurals (شكوى vs شكاوى); the complaint question in the test set fails for exactly these reasons. It can also strip too much: after normalisation إلغاء looks like ال + غاء, so it became غاء while الإلغاء became الغاء and the two never matched. The fix strips a second ال after a prefix, so both give غاء (test in `tests/test_textnorm.py`; Arabic hit@5 0.91 → 0.95).
 
 4. **How do you stop the model answering from its own memory?**
    Three layers: (1) the prompt says to use only the numbered sources and to reply NOT_IN_SOURCES otherwise; (2) the code blocks any answer without a valid [S#] citation; (3) the evaluation measures abstention on 10 questions the documents do not cover. A citation can still be wrong, so the judge also checks that the cited passage supports the claim.
@@ -57,4 +57,4 @@ For Sara. Do the walkthrough out loud twice before an interview, then answer the
    Add a section "## 6. Pets" to `data/docs/agency/en/baggage.md` and `ar/baggage.md` (same number in both). In `evals/questions.jsonl`, change `en-26` and `ar-26` to `"type": "same_lang"`, `"answerable": true` and `"gold_sections": ["baggage#6"]`. Run `pytest`: the dataset test will fail because there are now 8 unanswerable questions. Decide whether to update the test or write two new unanswerable questions, and explain the choice.
 
 3. **Retrieve fewer chunks (5 min).**
-   Run `python -m bilingual_rag "How long does a refund take?" -k 3 --search-only`, then change the default `k` in `AssistantConfig` from 5 to 3. Explain the trade-off: a shorter prompt (cheaper, less distraction) against a lower chance that the gold chunk is included (hit@3 0.76 vs hit@5 0.78 on all answerable questions).
+   Run `python -m bilingual_rag "How long does a refund take?" -k 3 --search-only`, then change the default `k` in `AssistantConfig` from 5 to 3. Explain the trade-off: a shorter prompt (cheaper, less distraction) against a lower chance that the gold chunk is included (hit@3 0.78 vs hit@5 0.80 on all answerable questions).
